@@ -9,8 +9,8 @@ TimerControl::TimerControl(TimerView* tv):
   {
     setupTime();
 
-    timerLimmit1 = initRTC_TimeTypeDef(0,0,5); // 25min
-    timerLimmit2 = initRTC_TimeTypeDef(0,0,5);  // 5min
+    timerLimmit1 = initRTC_TimeTypeDef(0,25,0); // 25min
+    timerLimmit2 = initRTC_TimeTypeDef(0,5,0);  // 5min
     tView = tv;
   }
   
