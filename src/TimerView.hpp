@@ -1,5 +1,8 @@
 #include <M5Core2.h>
 
+#ifndef TIMER_VIEW_H
+#define TIMER_VIEW_H
+
 class TimerView {
 private:
   uint16_t mBackcolor, mBackcolor1, mBackcolor2;
@@ -11,6 +14,8 @@ private:
 public:
   TimerView();
   void setTime(RTC_TimeTypeDef time);
-  void show();
+  void update();
   void setFlip(bool flip);
 };
+
+#endif 

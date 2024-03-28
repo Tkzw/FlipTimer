@@ -21,7 +21,7 @@ void TimerView::setTime(RTC_TimeTypeDef time) {
     mTime = time;
 }
 
-void TimerView::show() {
+void TimerView::update() {
     static char timeStrbuff[64];
 
     mSplite.fillRect(0, 0, mWidth, mHeight, mBackcolor);
