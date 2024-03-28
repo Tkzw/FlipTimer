@@ -5,6 +5,11 @@
 
 class TimerView {
 private:
+  class Timer{
+
+  };
+
+private:
   uint16_t mBackcolor, mBackcolor1, mBackcolor2;
   RTC_TimeTypeDef mTime;
   int mX, mY, mWidth, mHeight;
@@ -16,6 +21,10 @@ public:
   void setTime(RTC_TimeTypeDef time);
   void update();
   void setFlip(bool flip);
+  void notice();
+
+public:
+  static void stopViblate();
 };
 
 #endif 

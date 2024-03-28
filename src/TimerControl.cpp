@@ -4,12 +4,13 @@
 TimerControl::TimerControl(TimerView* tv): 
   oldIsFlipped(false),
   isFirstTime(true),
+  isNoticed(false),
   tView()
   {
     setupTime();
 
-    timerLimmit1 = initRTC_TimeTypeDef(0,25,0);
-    timerLimmit2 = initRTC_TimeTypeDef(0,5,0);
+    timerLimmit1 = initRTC_TimeTypeDef(0,0,5); // 25min
+    timerLimmit2 = initRTC_TimeTypeDef(0,0,5);  // 5min
     tView = tv;
   }
   
@@ -22,12 +23,20 @@ TimerControl::TimerControl(TimerView* tv):
     if ((oldIsFlipped != currentFlip) || (isFirstTime)) {
       startTime = currentTime;
       currentTimerLimmit = (currentFlip) ? timerLimmit1 : timerLimmit2;
+      isNoticed = false;
+
       isFirstTime = false;
     }
 
     tView->setFlip(currentFlip);
-    
-    tView->setTime(diffTime(currentTimerLimmit, diffTime(currentTime, startTime)));
+
+    RTC_TimeTypeDef cdTime = diffTime(currentTimerLimmit, diffTime(currentTime, startTime));
+    tView->setTime(cdTime);
+
+    if ((!isNoticed) && (cdTime.Hours == 0) && (cdTime.Minutes == 0) && cdTime.Seconds == 0) {
+      tView->notice();
+      isNoticed = true;
+    }
 
     oldIsFlipped = currentFlip;
   }
@@ -44,19 +53,16 @@ TimerControl::TimerControl(TimerView* tv):
   RTC_TimeTypeDef TimerControl::diffTime (RTC_TimeTypeDef a, RTC_TimeTypeDef b) {
     RTC_TimeTypeDef ret = {0,0,0};
 
-    ret.Seconds = a.Seconds - b.Seconds;
-    ret.Minutes = a.Minutes - b.Minutes;
-    ret.Hours = a.Hours - b.Hours;
-    
-    if (ret.Minutes < 0) {
-      ret.Minutes += 60;
-      ret.Hours -= 1;
-    }
+    int32_t aInSec = a.Hours * 3600 + a.Minutes * 60 + a.Seconds;
+    int32_t bInSec = b.Hours * 3600 + b.Minutes * 60 + b.Seconds;
 
-    if (ret.Seconds < 0) {
-      ret.Seconds += 60;
-      ret.Minutes -= 1;
-    }
+    int32_t diff = (aInSec - bInSec > 0) ? aInSec - bInSec : 0; 
+
+    ret.Hours = diff / 3600;
+    diff %= 3600;
+    ret.Minutes = diff / 60;
+    diff %= 60;
+    ret.Seconds = diff; 
 
     return ret;
   }

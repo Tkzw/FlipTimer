@@ -2,6 +2,7 @@
 
 #include "TimerView.hpp"
 #include "TimerControl.hpp"
+#include "DeferredExecuter.hpp"
 
 TimerView timerView;
 TimerControl timerControl(&timerView);
@@ -16,6 +17,7 @@ void loop() {
 
   timerControl.update();
   timerView.update();
+  DeferredExecuter::update();
 
-  delay(100);
+  delay(50);
 }

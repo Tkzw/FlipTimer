@@ -6,6 +6,7 @@ class TimerControl {
 private:
   bool oldIsFlipped;
   bool isFirstTime;
+  bool isNoticed;
   TimerView *tView;
   RTC_TimeTypeDef startTime;
 

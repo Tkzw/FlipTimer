@@ -1,4 +1,5 @@
 #include "TimerView.hpp"
+#include "DeferredExecuter.hpp"
 
 TimerView::TimerView() : mSplite(&M5.Lcd) {
     mBackcolor1 = M5.Lcd.color565(167, 255, 255);
@@ -41,4 +42,14 @@ void TimerView::update() {
 void TimerView::setFlip(bool flip) {
     mRotateAngle = (flip) ? 180 : 0;
     mBackcolor = (flip) ? mBackcolor1 : mBackcolor2;
+}
+
+void TimerView::notice() {
+    M5.Axp.SetLDOEnable(3, true);
+
+    DeferredExecuter::registerFunction(1000, TimerView::stopViblate);
+}
+
+void TimerView::stopViblate(){
+    M5.Axp.SetLDOEnable(3, false);
 }
